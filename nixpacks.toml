@@ -1,0 +1,7 @@
+[[languages]]
+name = "python"
+version = "3.9"
+
+[[languages]]
+name = "node"
+version = "18"
