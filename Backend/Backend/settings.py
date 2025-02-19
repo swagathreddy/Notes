@@ -156,12 +156,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend', 'build', 'static'),  # Ensure this path exists
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Serve React's index.html in production
 WHITENOISE_INDEX_FILE = os.path.join(BASE_DIR, 'frontend', 'build', 'index.html')
