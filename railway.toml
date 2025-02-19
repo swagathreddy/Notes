@@ -3,6 +3,6 @@ builder = "nixpacks"
 buildCommand = "apt update && apt install -y python3 python3-pip && chmod +x build.sh && ./build.sh"
 
 [deploy]
-startCommand = "cd backend && gunicorn backend.wsgi"
+startCommand = "cd Backend && gunicorn backend.wsgi"
 healthcheckPath = "/"
 healthcheckTimeout = 100
