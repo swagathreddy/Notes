@@ -3,6 +3,7 @@ builder = "nixpacks"
 buildCommand = "chmod +x build.sh && ./build.sh"
 
 [deploy]
-startCommand = "cd Backend && gunicorn Backend.wsgi:application --bind 0.0.0.0:8000"
+startCommand = "cd Backend && /usr/local/bin/gunicorn Backend.wsgi:application --bind 0.0.0.0:8000"
 healthcheckPath = "/"
 healthcheckTimeout = 100
+
