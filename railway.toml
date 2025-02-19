@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "./build.sh"
+
+[deploy]
+startCommand = "cd backend && gunicorn backend.wsgi"
+healthcheckPath = "/"
+healthcheckTimeout = 100
