@@ -7,14 +7,20 @@ then
     apt update && apt install -y python3 python3-pip
 fi
 
-# Move to Backend folder
-cd Backend
+# Ensure requirements.txt is found in the root directory
+if [ ! -f "../requirements.txt" ]; then
+    echo "Error: requirements.txt not found in the root directory!"
+    exit 1
+fi
 
 # Upgrade pip to avoid issues
 pip3 install --upgrade pip
 
-# Force install Django and all dependencies
-pip3 install -r requirements.txt
+# Install Django and all dependencies from the root `requirements.txt`
+pip3 install -r ../requirements.txt
+
+# Move to Backend folder
+cd Backend
 
 # Run Django commands
 python3 manage.py collectstatic --noinput
