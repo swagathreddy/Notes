@@ -11,5 +11,5 @@ cd ..
 
 # Django commands
 cd Backend
-python manage.py collectstatic --noinput
-python manage.py migrate
+python3 manage.py collectstatic --noinput
+python3 manage.py migrate
