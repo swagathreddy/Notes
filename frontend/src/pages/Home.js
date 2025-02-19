@@ -40,7 +40,7 @@ function Home() {
             });
     };
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [setIsLoading] = useState(false);
 
     const deleteNote = (id) => {
         setIsLoading(true);
