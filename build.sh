@@ -14,18 +14,26 @@ if [ ! -f "/app/requirements.txt" ]; then
     exit 1
 fi
 
-# Upgrade pip to avoid issues
+# Upgrade pip
 pip3 install --upgrade pip
 
 # Install MySQL dependencies before installing Python packages
 apt install -y default-libmysqlclient-dev build-essential pkg-config libssl-dev libffi-dev
 
-# Install Django and all dependencies from `/app/requirements.txt`
-pip3 install -r /app/requirements.txt
+# Install Django dependencies from `/app/requirements.txt`
+pip3 install --no-cache-dir -r /app/requirements.txt
 
-# Move to the correct Backend folder (with capital `B`)
+# Check if Gunicorn is installed
+if ! command -v gunicorn &> /dev/null
+then
+    echo "Gunicorn installation failed!"
+    exit 1
+fi
+
+# Move to Backend folder
 cd /app/Backend || { echo "Error: Backend folder not found!"; ls -la /app; exit 1; }
 
 # Run Django commands
 python3 manage.py collectstatic --noinput
 python3 manage.py migrate
+
