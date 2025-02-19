@@ -1,0 +1,8 @@
+Django>=5.1.4
+djangorestframework
+django-cors-headers
+python-dotenv
+djangorestframework-simplejwt
+whitenoise
+gunicorn
+mysqlclient
