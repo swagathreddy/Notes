@@ -1,41 +1,55 @@
 #!/bin/bash
+set -e  # Exit on error
+
+echo "Starting build process..."
 
 # Ensure Python is installed
-if ! command -v python3 &> /dev/null
-then
+if ! command -v python3 &> /dev/null; then
     echo "Python3 not found. Installing..."
     apt update && apt install -y python3 python3-pip
 fi
 
-# Add `/usr/local/bin` to PATH so Gunicorn can be found
+# Install system dependencies
+echo "Installing system dependencies..."
+apt install -y default-libmysqlclient-dev build-essential pkg-config libssl-dev libffi-dev nodejs npm
+
+# Set PATH
 export PATH="/usr/local/bin:$PATH"
 
-# Ensure `requirements.txt` is found in `/app/`
+# Check for requirements.txt
 if [ ! -f "/app/requirements.txt" ]; then
     echo "Error: requirements.txt not found in /app/"
-    ls -la /app  # Debugging step to list files
+    ls -la /app
     exit 1
 fi
 
-# Upgrade pip
+# Install Python dependencies
+echo "Installing Python dependencies..."
 pip3 install --upgrade pip
-
-# Install MySQL dependencies before installing Python packages
-apt install -y default-libmysqlclient-dev build-essential pkg-config libssl-dev libffi-dev
-
-# Install Django dependencies from `/app/requirements.txt`
 pip3 install --no-cache-dir -r /app/requirements.txt
 
-# Verify that Gunicorn is installed and available
-if ! command -v gunicorn &> /dev/null
-then
-    echo "Gunicorn is installed but not found in PATH. Manually setting the path..."
-    export PATH="/usr/local/bin:$PATH"
-fi
+# Build React frontend
+echo "Building React frontend..."
+cd /app/frontend || { echo "Error: frontend folder not found!"; ls -la /app; exit 1; }
+npm install
+npm run build
+cd ..
 
-# Move to Backend folder
+# Move built files
+echo "Moving built frontend files..."
+mkdir -p /app/Backend/staticfiles
+cp -r /app/frontend/build/* /app/Backend/staticfiles/
+
+# Move to Backend folder and run Django commands
+echo "Running Django commands..."
 cd /app/Backend || { echo "Error: Backend folder not found!"; ls -la /app; exit 1; }
 
-# Run Django commands
+# Collect static files
+echo "Collecting static files..."
 python3 manage.py collectstatic --noinput
+
+# Run migrations
+echo "Running database migrations..."
 python3 manage.py migrate
+
+echo "Build process completed successfully!"
